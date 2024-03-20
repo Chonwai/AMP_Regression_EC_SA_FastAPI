@@ -1,0 +1,8 @@
+torch==2.0.1
+biopython==1.81
+transformers==4.28.1
+tokenizers==0.13.3
+pandas==1.5.2
+scikit-learn
+matplotlib==3.7.1
+matplotlib-inline==0.1.6
