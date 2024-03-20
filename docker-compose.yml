@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  amp-regression-predict-flask:
+    build: .
+    ports:
+      - 8889:8888
+    volumes:
+      - .:/AMP_Regression_EC_SA_Predict
+    restart: always
+    # command: python app.py
+    command: flask run --host=0.0.0.0 --port=8888 --reload --debugger
+    # command: gunicorn app:app --workers 2 --bind 0.0.0.0:8888 --timeout 300
+    networks:
+      - amp-regression-predict-flask
+    # env_file: .env
+
+networks:
+  amp-regression-predict-flask:
+    external: true
