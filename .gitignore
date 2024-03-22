@@ -12,6 +12,5 @@ build/
 venv/
 .env
 **.pkl
-model/
-result/
-```
+model/**.pkl
+result/**.csv
