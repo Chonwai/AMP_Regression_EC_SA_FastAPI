@@ -53,7 +53,10 @@ def _get_train_data_loader(batch_size, train_dir, train_frac):
     return train_dataloader
 
 def _get_test_data_loader(batch_size, test_dir):
+    print(test_dir)
     dataset = pd.read_csv(test_dir)
+    # dataset = pd.read_csv('./')
+    print("here!!")
     test_data = Seq_Dataset(
         sequence=dataset.SEQUENCE_space.to_numpy(),
         tokenizer=tokenizer,

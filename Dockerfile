@@ -1,6 +1,8 @@
 FROM python:3.10
-WORKDIR /AMP_Regression_EC_SA_Predict
-COPY . /AMP_Regression_EC_SA_Predict
+# WORKDIR /amp-regression-predict-flask
+# COPY . /amp-regression-predict-flask
+WORKDIR /app
+COPY . /app
 
 RUN apt-get update && \
     apt-get install -y libgl1-mesa-glx && \

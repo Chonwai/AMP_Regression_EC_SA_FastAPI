@@ -1,5 +1,8 @@
 flask==2.2.1
 flask_cors==3.0.10
+uvicorn[standard]==0.23.2
+gunicorn
+werkzeug==2.2.2
 torch==2.0.1
 biopython==1.81
 transformers==4.28.1
