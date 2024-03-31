@@ -55,10 +55,12 @@ def predict(ec_model, sa_model, fasta_path, task_id):
 @app.route('/predict', methods=['POST'])
 def api_predict():
     if request.method == 'POST' and 'task_id' in request.form:
-        fasta_path = request.form.get('fasta_path')
+        # fasta_content = request.form.get('fasta_content')
+        # fasta_path = request.form.get('fasta_path')
         task_id = request.form.get('task_id')
-        if not fasta_path or not os.path.exists(fasta_path):
-            return jsonify({'error': 'fasta_path is required and should be a valid path to a fasta file.'}), 400
+        fasta_path = "./fasta/{id}.fasta".format(id=task_id)
+        # if not fasta_path or not os.path.exists(fasta_path):
+        #     return jsonify({'error': 'fasta_path is required and should be a valid path to a fasta file.'}), 400
         
         # Load your models here
         device = "cuda" if torch.cuda.is_available() else "cpu"
