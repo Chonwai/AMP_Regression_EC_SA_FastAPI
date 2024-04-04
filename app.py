@@ -20,8 +20,8 @@ def read_fasta_file(fasta_path):
         else:
             seq[name] += line.replace("\n", '').strip()
     f.close()
-    seq_df = pd.DataFrame(seq.items(), columns=['ID', 'SEQUENCE'])
-    seq_df["SEQUENCE_space"] = [" ".join(ele) for ele in seq_df["SEQUENCE"]]
+    seq_df = pd.DataFrame(seq.items(), columns=['id', 'sequence'])
+    seq_df["squence_space"] = [" ".join(ele) for ele in seq_df["sequence"]]
     return seq_df
 
 def predict(ec_model, sa_model, fasta_path, task_id):
@@ -47,8 +47,8 @@ def predict(ec_model, sa_model, fasta_path, task_id):
     ec_predict_list = [item for sublist in ec_predict_list for item in sublist]
     sa_predict_list = [item for sublist in sa_predict_list for item in sublist]
     
-    seq["ec_predicted_pMIC"] = ec_predict_list
-    seq["sa_predicted_pMIC"] = sa_predict_list
+    seq["ec_predicted_pmic"] = ec_predict_list
+    seq["sa_predicted_pmic"] = sa_predict_list
     seq.to_csv(csv_path, index=False)
     return csv_path
 

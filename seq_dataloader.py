@@ -34,7 +34,7 @@ class Seq_Dataset(Dataset):
             return_tensors='pt',
         )
         return {
-          'protein_sequence': sequence,
+          'protein_squence': sequence,
           'input_ids': encoding['input_ids'].flatten(),
           'attention_mask': encoding['attention_mask'].flatten(),
         }
@@ -44,7 +44,7 @@ def _get_train_data_loader(batch_size, train_dir, train_frac):
     dataset = pd.read_csv(train_dir)
     dataset = dataset.sample(frac = train_frac)
     train_data = Seq_Dataset(
-        sequence=dataset.SEQUENCE_space.to_numpy(),
+        sequence=dataset.squence_space.to_numpy(),
         tokenizer=tokenizer,
         max_len=MAX_LEN
   )
@@ -58,7 +58,7 @@ def _get_test_data_loader(batch_size, test_dir):
     # dataset = pd.read_csv('./')
     print("here!!")
     test_data = Seq_Dataset(
-        sequence=dataset.SEQUENCE_space.to_numpy(),
+        sequence=dataset.squence_space.to_numpy(),
         tokenizer=tokenizer,
         max_len=MAX_LEN
   )
