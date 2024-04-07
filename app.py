@@ -26,11 +26,38 @@ def read_fasta_file(fasta_path):
     return seq_df
 
 
+# def predict(ec_model, sa_model, fasta_path, task_id):
+#     csv_path = "result/{id}.csv".format(id=task_id)
+#     batch_size = 500
+#     seq = read_fasta_file(fasta_path)
+#     seq.to_csv(csv_path)
+#     test_loader = _get_test_data_loader(batch_size, csv_path)
+
+#     ec_predict_list, sa_predict_list = [], []
+#     ec_model.eval()
+#     sa_model.eval()
+#     with torch.no_grad():
+#         for batch in test_loader:
+#             b_input_ids = batch["input_ids"]
+#             b_input_mask = batch["attention_mask"]
+#             ec_predict_pMIC, _ = ec_model(b_input_ids, attention_mask=b_input_mask)
+#             ec_predict_list.extend(ec_predict_pMIC.data.numpy())
+#             sa_predict_pMIC, _ = sa_model(b_input_ids, attention_mask=b_input_mask)
+#             sa_predict_list.extend(sa_predict_pMIC.data.numpy())
+
+#     ec_predict_list = [item for sublist in ec_predict_list for item in sublist]
+#     sa_predict_list = [item for sublist in sa_predict_list for item in sublist]
+
+#     seq["ec_predicted_pmic"] = ec_predict_list
+#     seq["sa_predicted_pmic"] = sa_predict_list
+#     seq.to_csv(csv_path, index=False)
+#     return csv_path
+
+
 def predict(ec_model, sa_model, fasta_path, task_id):
-    # csv_path = fasta_path.replace(".fasta", ".csv")
     csv_path = "result/{id}.csv".format(id=task_id)
     batch_size = 500
-    seq = read_fasta_file(fasta_path)
+    seq = read_fasta_file(fasta_path, csv_path)
     seq.to_csv(csv_path)
     test_loader = _get_test_data_loader(batch_size, csv_path)
 
@@ -49,8 +76,9 @@ def predict(ec_model, sa_model, fasta_path, task_id):
     ec_predict_list = [item for sublist in ec_predict_list for item in sublist]
     sa_predict_list = [item for sublist in sa_predict_list for item in sublist]
 
-    seq["ec_predicted_pmic"] = ec_predict_list
-    seq["sa_predicted_pmic"] = sa_predict_list
+    seq["ec_predicted_MIC_μM"] = [10 ** (-item) for item in ec_predict_list]
+    seq["sa_predicted_MIC_μM"] = [10 ** (-item) for item in sa_predict_list]
+    seq = seq.drop(columns=["sequence_space"])
     seq.to_csv(csv_path, index=False)
     return csv_path
 
