@@ -6,12 +6,18 @@ from transformers import BertTokenizer, get_linear_schedule_with_warmup
 d_model = 1024
 batch_size = 8
 MAX_LEN = 77
-tokenizer = BertTokenizer.from_pretrained("Rostlab/prot_bert", do_lower_case=False )
+tokenizer = BertTokenizer.from_pretrained("Rostlab/prot_bert", do_lower_case=False)
 
-largest_MIC = 10000; def_bias = 4.0; def_scale = 1/6;
+largest_MIC = 10000
+def_bias = 4.0
+def_scale = 1 / 6
+
+
 def descale(output, bias=def_bias, scale=def_scale):
     new_out = output / scale - bias
     return new_out
+
+
 class Seq_Dataset(Dataset):
     def __init__(self, sequence, tokenizer, max_len):
         self.sequence = sequence
@@ -29,28 +35,29 @@ class Seq_Dataset(Dataset):
             add_special_tokens=True,
             max_length=self.max_len,
             return_token_type_ids=False,
-            padding='max_length',
+            padding="max_length",
             return_attention_mask=True,
-            return_tensors='pt',
+            return_tensors="pt",
         )
         return {
-          'protein_squence': sequence,
-          'input_ids': encoding['input_ids'].flatten(),
-          'attention_mask': encoding['attention_mask'].flatten(),
+            "protein_squence": sequence,
+            "input_ids": encoding["input_ids"].flatten(),
+            "attention_mask": encoding["attention_mask"].flatten(),
         }
 
 
 def _get_train_data_loader(batch_size, train_dir, train_frac):
     dataset = pd.read_csv(train_dir)
-    dataset = dataset.sample(frac = train_frac)
+    dataset = dataset.sample(frac=train_frac)
     train_data = Seq_Dataset(
-        sequence=dataset.sequence_space.to_numpy(),
-        tokenizer=tokenizer,
-        max_len=MAX_LEN
-  )
+        sequence=dataset.sequence_space.to_numpy(), tokenizer=tokenizer, max_len=MAX_LEN
+    )
 
-    train_dataloader = DataLoader(train_data, batch_size=batch_size, shuffle=False, num_workers=0, pin_memory=True)
+    train_dataloader = DataLoader(
+        train_data, batch_size=batch_size, shuffle=False, num_workers=0, pin_memory=True
+    )
     return train_dataloader
+
 
 def _get_test_data_loader(batch_size, test_dir):
     print(test_dir)
@@ -58,15 +65,13 @@ def _get_test_data_loader(batch_size, test_dir):
     # dataset = pd.read_csv('./')
     print("here!!")
     test_data = Seq_Dataset(
-        sequence=dataset.sequence_space.to_numpy(),
-        tokenizer=tokenizer,
-        max_len=MAX_LEN
-  )
+        sequence=dataset.sequence_space.to_numpy(), tokenizer=tokenizer, max_len=MAX_LEN
+    )
 
-    test_dataloader = DataLoader(test_data, batch_size=batch_size, shuffle=False, num_workers=0, pin_memory=True)
+    test_dataloader = DataLoader(
+        test_data, batch_size=batch_size, shuffle=False, num_workers=0, pin_memory=True
+    )
     return test_dataloader
-
-
 
 
 def freeze(model, frozen_layers):
