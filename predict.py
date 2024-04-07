@@ -29,7 +29,7 @@ def read_fasta_file(fasta_path, csv_path):
             seq[name] += line.replace("\n", "").strip()
     f.close()
     seq_df = pd.DataFrame(seq.items(), columns=["id", "sequence"])
-    seq_df["squence_space"] = [" ".join(ele) for ele in seq_df["sequence"]]
+    seq_df["sequence_space"] = [" ".join(ele) for ele in seq_df["sequence"]]
     seq_df.to_csv(csv_path)
     return seq_df
 
@@ -54,7 +54,7 @@ def predict(ec_model, sa_model, fasta_path, csv_path):
     sa_predict_list = [item for sublist in sa_predict_list for item in sublist]
     seq["ec_predicted_MIC_μM"] = [10 ** (-item) for item in ec_predict_list]
     seq["sa_predicted_MIC_μM"] = [10 ** (-item) for item in sa_predict_list]
-    seq = seq.drop(columns=["SEQUENCE_space"])
+    seq = seq.drop(columns=["sequence_space"])
     seq.to_csv(csv_path, index=False)
 
 

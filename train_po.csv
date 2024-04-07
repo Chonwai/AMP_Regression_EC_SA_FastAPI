@@ -1,4 +1,4 @@
-id,sequence,squence_space,ec_predicted_pmic,sa_predicted_pmic
+id,sequence,sequence_space,ec_predicted_pmic,sa_predicted_pmic
 >amp5_30_1,ACSAG,A C S A G,-1.9237005,-2.2732675
 >amp5_30_2,AMVGT,A M V G T,-1.8160545,-2.343564
 >amp5_30_3,AMVSS,A M V S S,-1.9919071,-2.5826068

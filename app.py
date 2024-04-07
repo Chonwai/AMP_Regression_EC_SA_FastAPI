@@ -21,7 +21,7 @@ def read_fasta_file(fasta_path):
             seq[name] += line.replace("\n", '').strip()
     f.close()
     seq_df = pd.DataFrame(seq.items(), columns=['id', 'sequence'])
-    seq_df["squence_space"] = [" ".join(ele) for ele in seq_df["sequence"]]
+    seq_df["sequence_space"] = [" ".join(ele) for ele in seq_df["sequence"]]
     return seq_df
 
 def predict(ec_model, sa_model, fasta_path, task_id):
