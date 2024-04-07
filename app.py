@@ -57,7 +57,7 @@ def read_fasta_file(fasta_path):
 def predict(ec_model, sa_model, fasta_path, task_id):
     csv_path = "result/{id}.csv".format(id=task_id)
     batch_size = 500
-    seq = read_fasta_file(fasta_path, csv_path)
+    seq = read_fasta_file(fasta_path)
     seq.to_csv(csv_path)
     test_loader = _get_test_data_loader(batch_size, csv_path)
 
