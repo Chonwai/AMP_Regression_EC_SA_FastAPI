@@ -16,6 +16,7 @@ import math
 from Bio.SeqUtils.ProtParam import ProteinAnalysis
 import collections
 
+
 def read_fasta_file(fasta_path, csv_path):
     f = open(fasta_path, "r")
     seq = collections.OrderedDict()
@@ -23,26 +24,27 @@ def read_fasta_file(fasta_path, csv_path):
         if line.startswith(">"):
             name = line.split()[0]
             print(name)
-            seq[name] = ''
+            seq[name] = ""
         else:
-            seq[name] += line.replace("\n", '').strip()
+            seq[name] += line.replace("\n", "").strip()
     f.close()
-    seq_df = pd.DataFrame(seq.items(), columns=['id', 'sequence'])
+    seq_df = pd.DataFrame(seq.items(), columns=["id", "sequence"])
     seq_df["squence_space"] = [" ".join(ele) for ele in seq_df["sequence"]]
     seq_df.to_csv(csv_path)
     return seq_df
+
 
 def predict(ec_model, sa_model, fasta_path, csv_path):
     batch_size = 500
     seq = read_fasta_file(fasta_path, csv_path)
     test_loader = _get_test_data_loader(batch_size, csv_path)
-    ec_predict_list, sa_predict_list = [],[]
+    ec_predict_list, sa_predict_list = [], []
     ec_model.eval()
     sa_model.eval()
     with torch.no_grad():
         for batch in test_loader:
-            b_input_ids = batch['input_ids']
-            b_input_mask = batch['attention_mask']
+            b_input_ids = batch["input_ids"]
+            b_input_mask = batch["attention_mask"]
             ec_predict_pMIC, _ = ec_model(b_input_ids, attention_mask=b_input_mask)
             ec_predict_list.extend(ec_predict_pMIC.data.numpy())
 
@@ -50,10 +52,11 @@ def predict(ec_model, sa_model, fasta_path, csv_path):
             sa_predict_list.extend(sa_predict_pMIC.data.numpy())
     ec_predict_list = [item for sublist in ec_predict_list for item in sublist]
     sa_predict_list = [item for sublist in sa_predict_list for item in sublist]
-    seq["ec_predicted_MIC_μM"] = [10**(-item) for item in ec_predict_list]
-    seq["sa_predicted_MIC_μM"] = [10**(-item) for item in sa_predict_list]
-    seq = seq.drop(columns = ["SEQUENCE_space"])
+    seq["ec_predicted_MIC_μM"] = [10 ** (-item) for item in ec_predict_list]
+    seq["sa_predicted_MIC_μM"] = [10 ** (-item) for item in sa_predict_list]
+    seq = seq.drop(columns=["SEQUENCE_space"])
     seq.to_csv(csv_path, index=False)
+
 
 if __name__ == "__main__":
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -68,4 +71,4 @@ if __name__ == "__main__":
     fasta_path = "train_po.fasta"
     csv_path = "train_po.csv"
     predict(ec_model, sa_model, fasta_path, csv_path)
-    print('smart')
+    print("smart")
