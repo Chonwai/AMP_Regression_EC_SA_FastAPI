@@ -2,8 +2,8 @@ version: "3"
 
 services:
   amp-regression-predict-flask:
-    mem_limit: 1g # Memory limit for the container
-    memswap_limit: 1g # Swap memory limit for the container
+    mem_limit: 3g # Memory limit for the container
+    memswap_limit: 3g # Swap memory limit for the container
     build:
       context: .
     ports:
