@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   amp-regression-predict-flask:
     mem_limit: 3g # Memory limit for the container

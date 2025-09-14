@@ -5,5 +5,5 @@ WORKDIR /app
 COPY . /app
 
 RUN apt-get update && \
-    apt-get install -y libgl1-mesa-glx && \
+    apt-get install -y libgl1 libglx-mesa0 && \
     pip install -r requirements.txt
