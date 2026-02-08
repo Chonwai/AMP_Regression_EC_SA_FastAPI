@@ -1,7 +1,7 @@
 services:
   amp-regression-predict-flask:
-    mem_limit: 3g # Memory limit for the container
-    memswap_limit: 3g # Swap memory limit for the container
+    mem_limit: 6g # Memory limit for the container
+    memswap_limit: 6g # Swap memory limit for the container
     build:
       context: .
     ports:
@@ -10,7 +10,7 @@ services:
       - .:/app
     restart: always
     # command: flask run --host=0.0.0.0 --port=8889 --reload --debugger
-    command: gunicorn app:app --workers 2 --bind 0.0.0.0:8889 --timeout 3600
+    command: gunicorn app:app --workers 1 --preload --bind 0.0.0.0:8889 --timeout 3600
     # env_file: .env
     networks:
       - axpep-ecosystem-network
